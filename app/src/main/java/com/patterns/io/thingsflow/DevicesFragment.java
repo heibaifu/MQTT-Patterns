@@ -41,7 +41,8 @@ public class DevicesFragment extends Fragment {
                 "Device 2",
                 "Device 3",
                 "Test for GitHub",
-                "Test for branching Network"
+                "Test for branching Network",
+                "Test for change form GitHub"
         };
 
         List<String> devices = new ArrayList<String>(Arrays.asList(arrayStrings));
