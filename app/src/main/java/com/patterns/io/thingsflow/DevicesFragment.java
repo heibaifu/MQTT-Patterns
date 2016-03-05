@@ -1,5 +1,6 @@
 package com.patterns.io.thingsflow;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -57,7 +58,7 @@ public class DevicesFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
             FetchDevicesTask devicesTask = new FetchDevicesTask();
-            devicesTask.execute();
+            devicesTask.execute("94043");
             return true;
         }
 
@@ -101,17 +102,14 @@ public class DevicesFragment extends Fragment {
         // Bind the adapter to the List View
         listView.setAdapter(devicesAdapter);
 
-        //new FetchDevicesTask().execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7&appid=8889689cdc229214c182a2ea6a3f5e55");
-
-
         return rootView;
 
     }
-
-    public class FetchDevicesTask extends AsyncTask <Void, Void, Void>{
+    //The AsyncTask is called with <Params, Progress, Result>
+    public class FetchDevicesTask extends AsyncTask <String, Void, Void>{
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... paramString) {
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
@@ -120,12 +118,36 @@ public class DevicesFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
 
+
+            String format   = "json";
+            String units    = "metric";
+            String appid    = "8889689cdc229214c182a2ea6a3f5e55";
+            int numDays     = 7;
+
             try {
-                String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7&appid=8889689cdc229214c182a2ea6a3f5e55";
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
-                URL url = new URL(baseUrl);
+                // Construct the URL for the Device Querey
+                // Possible parameters are available at API provider
+
+                final String BASE_URL =
+                        "http://api.openweathermap.org/data/2.5/forecast/daily?";
+
+                final String QUERY_PARAM    = "q";
+                final String FORMAT_PARAM   = "mode";
+                final String UNITS_PARAM    = "units";
+                final String DAYS_PARAM     = "cnt";
+                final String APPID_PARAM    = "APPID";
+
+                Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                        .appendQueryParameter(QUERY_PARAM, paramString[0])
+                        .appendQueryParameter(FORMAT_PARAM, format)
+                        .appendQueryParameter(UNITS_PARAM, units)
+                        .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                        .appendQueryParameter(APPID_PARAM, appid)
+                        .build();
+
+                URL url = new URL(builtUri.toString());
+
+                Log.d("Device Flow", "Built URI: " + builtUri.toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -154,6 +176,10 @@ public class DevicesFragment extends Fragment {
                     return null;
                 }
                 forecastJsonStr = buffer.toString();
+
+                // Log the data that was fetched from the online API.
+                Log.d("Weather data", forecastJsonStr);
+
             } catch (IOException e) {
                 Log.e("PlaceholderFragment", "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
