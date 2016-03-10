@@ -1,5 +1,6 @@
 package com.patterns.io.thingsflow;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -107,6 +109,22 @@ public class DevicesFragment extends Fragment {
 
         // Bind the adapter to the List View
         listView.setAdapter(devicesAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l ){
+
+                String device = devicesAdapter.getItem(position);
+                //Toast.makeText(getActivity(), "this is my Toast message!!! =)", Toast.LENGTH_SHORT).show();
+
+                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+                detailIntent.putExtra("DEVICE", device);
+                startActivity(detailIntent);
+
+
+            }
+        });
+
 
         return rootView;
 
