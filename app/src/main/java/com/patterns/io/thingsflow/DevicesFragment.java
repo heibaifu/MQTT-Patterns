@@ -1,6 +1,11 @@
 package com.patterns.io.thingsflow;
 
+import android.annotation.TargetApi;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,14 +45,30 @@ public class DevicesFragment extends Fragment {
 
     private ArrayAdapter<String> devicesAdapter;
 
+    private BluetoothAdapter mBluetoothAdapter;
+
     public DevicesFragment() {
     }
 
     @Override
+    @TargetApi(18) // Set this function to point at higher API to include the BLE calls.
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+
+        // Use this check to determine whether BLE is supported on the device. Then
+        // you can selectively disable BLE-related features.
+        if (!getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(getActivity(), "Bluetooth Low Energy not supported", Toast.LENGTH_LONG).show();
+            getActivity().finish();
+        }else {
+            // This section executes only if the current API supports BLE.
+            final BluetoothManager bluetoothManager =
+                    (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
+            mBluetoothAdapter = bluetoothManager.getAdapter();
+        }
+
     }
 
     @Override
@@ -83,12 +105,7 @@ public class DevicesFragment extends Fragment {
 
 
         String[] arrayStrings = {
-                "Device 1",
-                "Device 2",
-                "Device 3",
-                "Test for GitHub",
-                "Test for branching Network",
-                "Test for change form GitHub"
+                ""
         };
 
         List<String> devices = new ArrayList<String>(Arrays.asList(arrayStrings));
