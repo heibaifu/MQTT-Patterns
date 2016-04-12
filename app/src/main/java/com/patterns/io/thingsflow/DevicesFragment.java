@@ -1,11 +1,7 @@
 package com.patterns.io.thingsflow;
 
-import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Handler;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -46,28 +42,22 @@ public class DevicesFragment extends Fragment {
     private ArrayAdapter<String> devicesAdapter;
 
     private BluetoothAdapter mBluetoothAdapter;
+    private boolean mScanning;
+    private Handler mHandler;
+
+    // Stops scanning after 10 seconds.
+    private static final long SCAN_PERIOD = 10000;
 
     public DevicesFragment() {
+
     }
 
     @Override
-    @TargetApi(18) // Set this function to point at higher API to include the BLE calls.
+    //@TargetApi(18) // Set this function to point at higher API to include the BLE calls.
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
-
-        // Use this check to determine whether BLE is supported on the device. Then
-        // you can selectively disable BLE-related features.
-        if (!getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(getActivity(), "Bluetooth Low Energy not supported", Toast.LENGTH_LONG).show();
-            getActivity().finish();
-        }else {
-            // This section executes only if the current API supports BLE.
-            final BluetoothManager bluetoothManager =
-                    (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
-            mBluetoothAdapter = bluetoothManager.getAdapter();
-        }
 
     }
 
@@ -101,8 +91,6 @@ public class DevicesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-
 
         String[] arrayStrings = {
                 ""
@@ -146,6 +134,7 @@ public class DevicesFragment extends Fragment {
         return rootView;
 
     }
+
     //The AsyncTask is called with <Params, Progress, Result>
     public class FetchDevicesTask extends AsyncTask <String, Void, String[]>{
 
@@ -158,7 +147,6 @@ public class DevicesFragment extends Fragment {
             SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
             return shortenedDateFormat.format(time);
         }
-
 
         /**
          * Prepare the weather high/lows for presentation.
@@ -248,8 +236,6 @@ public class DevicesFragment extends Fragment {
             return resultStrs;
 
         }
-
-
 
         @Override
         protected String[] doInBackground(String... paramString) {
@@ -352,7 +338,6 @@ public class DevicesFragment extends Fragment {
 
             return null;
         }
-
 
         @Override
         protected void onPostExecute(String[] result) {
