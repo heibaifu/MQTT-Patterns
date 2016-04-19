@@ -4,13 +4,22 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
     defaultConfig {
         applicationId "com.patterns.io.thingsflow"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -27,4 +36,8 @@ dependencies {
     compile files('libs/org.eclipse.paho.android.service-1.0.2.jar')
     compile files('libs/org.eclipse.paho.android.service.jar')
     compile files('libs/org.eclipse.paho.client.mqttv3-1.0.2.jar')
+    compile files('libs/pg-1.54.0.0.jar')
+    compile files('libs/pkix-1.54.0.0.jar')
+    compile files('libs/core-1.54.0.0.jar')
+    compile files('libs/prov-1.54.0.0.jar')
 }
