@@ -98,7 +98,7 @@ public class DetailActivityFragment extends Fragment {
         @Override
         public void onClick(final View v) {
             switch(v.getId()){
-                case R.id.buttonMQTT:
+                case R.id.fab:
                     //Handle Button click
                     SendMQTT mqttSender = new SendMQTT();
                     mqttSender.execute("simon,77");
@@ -126,13 +126,14 @@ public class DetailActivityFragment extends Fragment {
             In the constructor "context" was substituted by "this"
             */
 
-            String connectionURI = "ssl://A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com:8883";
+            String connectionURI = "tcp://192.168.0.11:1883";
+            //String connectionURI = "ssl://A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com:8883";
             //String connectionURI = "tcp://broker.mqttdashboard.com:1883";
-            String topic                = "MQTT/SHARK";
+            String topic                = "shark/tiburon";
             String content              = "TIBURON TIBURON TIBURON TIBURON";
             int qos                     = 0;
             String broker               = connectionURI;
-            String clientId             = "JavaSample";
+            String clientId             = "RobertoClienteDeMQTT";
             MemoryPersistence persistence = new MemoryPersistence();
 
             try {
@@ -146,14 +147,14 @@ public class DetailActivityFragment extends Fragment {
                 connOpts.setSSLProperties(SSLprops);*/
                 options.setConnectionTimeout(60);
                 options.setKeepAliveInterval(60);
-                options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
+                //options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
 
                 InputStream caCert      = getActivity().getResources().openRawResource(R.raw.root);
                 InputStream clientCert  = getActivity().getResources().openRawResource(R.raw.certificate);
                 InputStream privateKey  = getActivity().getResources().openRawResource(R.raw.privatekey);
 
                 Log.d("Things Flow - I/O", "Checkpoint 1");
-                options.setSocketFactory(getSocketFactory("caFilePath", "clientCrtFilePath", "clientKeyFilePath", "123456", caCert, clientCert, privateKey));
+                //options.setSocketFactory(getSocketFactory("caFilePath", "clientCrtFilePath", "clientKeyFilePath", "123456", caCert, clientCert, privateKey));
                 //////////////////////////////////////////////////////////////////////////////////
                 Log.d("Things Flow - I/O", "Checkpoint 2");
                 System.out.println("Connecting to broker: " + broker);
