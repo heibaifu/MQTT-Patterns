@@ -77,8 +77,8 @@ public class DevicesFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            FetchDevicesTask devicesTask = new FetchDevicesTask();
-            devicesTask.execute("22194,mx");
+            //FetchDevicesTask devicesTask = new FetchDevicesTask();
+            //devicesTask.execute("22194,mx");
             return true;
         }
 
@@ -93,7 +93,7 @@ public class DevicesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         String[] arrayStrings = {
-                ""
+                "Publish ->"
         };
 
         List<String> devices = new ArrayList<String>(Arrays.asList(arrayStrings));

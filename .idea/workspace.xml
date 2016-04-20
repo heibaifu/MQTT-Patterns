@@ -106,14 +106,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DevicesFragment.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DevicesFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/patterns/io/thingsflow/DevicesFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="249" column="0" selection-start-line="249" selection-start-column="0" selection-end-line="249" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.26445264">
+              <caret line="79" column="14" selection-start-line="79" selection-start-column="14" selection-end-line="79" selection-end-column="14" />
               <folding>
                 <element signature="method#getReadableDateString#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
-                <element signature="e#4609#4675#0" expanded="false" />
+                <element signature="e#4623#4689#0" expanded="false" />
                 <element signature="method#formatHighLows#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
                 <element signature="method#getWeatherDataFromJson#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
               </folding>
@@ -121,10 +121,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fragment_detail.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="fragment_detail.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_detail.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8010204">
+            <state vertical-scroll-proportion="-21.655172">
               <caret line="154" column="18" selection-start-line="154" selection-start-column="18" selection-end-line="154" selection-end-column="18" />
               <folding>
                 <element signature="e#231#264#0" expanded="true" />
@@ -1735,9 +1735,9 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/patterns/io/thingsflow/DevicesFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/patterns/io/thingsflow/DetailActivityFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_detail.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/patterns/io/thingsflow/DevicesFragment.java" />
       </list>
     </option>
   </component>
@@ -2430,11 +2430,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="15" y="23" width="1665" height="1023" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3314849" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3314849" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296582" sideWeight="0.4978435" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2896,17 +2896,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/patterns/io/thingsflow/DevicesFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_detail.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="249" column="0" selection-start-line="249" selection-start-column="0" selection-end-line="249" selection-end-column="0" />
+        <state vertical-scroll-proportion="-21.655172">
+          <caret line="154" column="18" selection-start-line="154" selection-start-column="18" selection-end-line="154" selection-end-column="18" />
           <folding>
-            <element signature="method#getReadableDateString#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
-            <element signature="e#4609#4675#0" expanded="false" />
-            <element signature="method#formatHighLows#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
-            <element signature="method#getWeatherDataFromJson#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
+            <element signature="e#231#264#0" expanded="true" />
+            <element signature="e#289#324#0" expanded="true" />
+            <element signature="e#350#385#0" expanded="true" />
+            <element signature="e#409#442#0" expanded="true" />
+            <element signature="e#6057#6076#0" expanded="true" />
           </folding>
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/patterns/io/thingsflow/DetailActivityFragment.java">
@@ -2921,21 +2925,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_detail.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/patterns/io/thingsflow/DevicesFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8010204">
-          <caret line="154" column="18" selection-start-line="154" selection-start-column="18" selection-end-line="154" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.26445264">
+          <caret line="79" column="14" selection-start-line="79" selection-start-column="14" selection-end-line="79" selection-end-column="14" />
           <folding>
-            <element signature="e#231#264#0" expanded="true" />
-            <element signature="e#289#324#0" expanded="true" />
-            <element signature="e#350#385#0" expanded="true" />
-            <element signature="e#409#442#0" expanded="true" />
-            <element signature="e#6057#6076#0" expanded="true" />
+            <element signature="method#getReadableDateString#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
+            <element signature="e#4623#4689#0" expanded="false" />
+            <element signature="method#formatHighLows#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
+            <element signature="method#getWeatherDataFromJson#0;class#FetchDevicesTask#0;class#DevicesFragment#0" expanded="false" />
           </folding>
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
   </component>
