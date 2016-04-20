@@ -3,6 +3,7 @@ package com.patterns.io.thingsflow;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +12,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -28,7 +29,6 @@ import org.spongycastle.openssl.jcajce.JcaPEMKeyConverter;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,16 +46,17 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-//import com.google.android.gms.security.ProviderInstaller;
-;
-//import com.google.android.gms.security.ProviderInstaller;
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
 
-    //public SendMQTT             mqttSender;
+    public EditText             textBroker;
+    public EditText             textPort;
+    public EditText             textPublish;
+    public EditText             textPublishTopic;
 
+    public FloatingActionButton fab;
 
     public DetailActivityFragment() {
     }
@@ -80,16 +81,18 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        //View rootView = inflater.inflate(R.layout.detail_layout, container, false);
 
         ///////////////  ALL THIS IS   I/O    MQTT STUFF //////////////////////////////////////////
         // Find the listView by its ID
-        Button buttonMQTT = (Button) rootView.findViewById(R.id.buttonMQTT);
+        fab                 = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        textBroker          = (EditText)             rootView.findViewById(R.id.editTextBroker);
+        textPort            = (EditText)             rootView.findViewById(R.id.editTextPort);
+        textPublish         = (EditText)             rootView.findViewById(R.id.editTextPublish);
+        textPublishTopic    = (EditText)             rootView.findViewById(R.id.editTextPublishTopic);
 
-        buttonMQTT.setOnClickListener(onClickListenerMQTT);
+        fab.setOnClickListener(onClickListenerMQTT);
 
-
-
-        //return inflater.inflate(R.layout.fragment_detail, container, false);
         return rootView;
     }
 
@@ -101,7 +104,16 @@ public class DetailActivityFragment extends Fragment {
                 case R.id.fab:
                     //Handle Button click
                     SendMQTT mqttSender = new SendMQTT();
-                    mqttSender.execute("simon,77");
+
+                    String stringBroker = textBroker        .getText().toString();
+                    String stringPort   = textPort          .getText().toString();
+                    String textToPublish= textPublish       .getText().toString();
+                    String publishTopic = textPublishTopic  .getText().toString();
+
+                    String URIbroker    = "ssl://"+stringBroker+":"+stringPort;
+
+                    String argument[] = {URIbroker,publishTopic,textToPublish};
+                    mqttSender.execute(argument);
                     break;
             }
         }
@@ -113,7 +125,6 @@ public class DetailActivityFragment extends Fragment {
         public MqttAndroidClient    client;
         public Context              context;
         public MqttMessage          message;
-
         public String               content     = "Mensaje Tiburon";
         public String               topic       = "MQTT Examples";
 
@@ -126,11 +137,12 @@ public class DetailActivityFragment extends Fragment {
             In the constructor "context" was substituted by "this"
             */
 
-            String connectionURI = "tcp://192.168.0.11:1883";
+            //String connectionURI = "ssl://192.168.0.11:8883";
+            String connectionURI = paramString[0];
             //String connectionURI = "ssl://A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com:8883";
             //String connectionURI = "tcp://broker.mqttdashboard.com:1883";
-            String topic                = "shark/tiburon";
-            String content              = "TIBURON TIBURON TIBURON TIBURON";
+            String topic                = paramString[1];
+            String content              = paramString[2];
             int qos                     = 0;
             String broker               = connectionURI;
             String clientId             = "RobertoClienteDeMQTT";
@@ -142,19 +154,16 @@ public class DetailActivityFragment extends Fragment {
                 options.setCleanSession(true);
 
                 ///////////////////////////////////////////////////////////////////////////////////
-                /*Properties SSLprops = new Properties();
-                SSLprops.setProperty("com.ibm.ssl.protocol","TLSv1");
-                connOpts.setSSLProperties(SSLprops);*/
                 options.setConnectionTimeout(60);
                 options.setKeepAliveInterval(60);
                 //options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
 
-                InputStream caCert      = getActivity().getResources().openRawResource(R.raw.root);
+                InputStream caCert      = getActivity().getResources().openRawResource(R.raw.ca);
                 InputStream clientCert  = getActivity().getResources().openRawResource(R.raw.certificate);
                 InputStream privateKey  = getActivity().getResources().openRawResource(R.raw.privatekey);
 
                 Log.d("Things Flow - I/O", "Checkpoint 1");
-                //options.setSocketFactory(getSocketFactory("caFilePath", "clientCrtFilePath", "clientKeyFilePath", "123456", caCert, clientCert, privateKey));
+                options.setSocketFactory(getSocketFactory("1234", caCert, clientCert, privateKey));
                 //////////////////////////////////////////////////////////////////////////////////
                 Log.d("Things Flow - I/O", "Checkpoint 2");
                 System.out.println("Connecting to broker: " + broker);
@@ -192,8 +201,7 @@ public class DetailActivityFragment extends Fragment {
         }
     }
 
-    private SSLSocketFactory getSocketFactory (final String caCrtFile, final String crtFile, final String keyFile,
-                                              final String password, final InputStream caFileStream,
+    private SSLSocketFactory getSocketFactory ( final String password, final InputStream caFileStream,
                                               final InputStream clientCertStream,final InputStream clientPrivateStream) throws Exception
     {
 
@@ -202,10 +210,6 @@ public class DetailActivityFragment extends Fragment {
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         Security.addProvider(new BouncyCastleProvider());
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        File caFile                = new File(caCrtFile);
-        File clientCertFile        = new File(crtFile);
-        File clientPrivateFile     = new File(keyFile);
 
         int caSize              = caFileStream.available();
         int clientCertSize      = clientCertStream.available();
@@ -280,7 +284,8 @@ public class DetailActivityFragment extends Fragment {
 
         // finally, create SSL socket factory
         SSLContext context = SSLContext.getInstance("TLSv1.2");
-        context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+        //context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+        context.init(null, tmf.getTrustManagers(), null);
 
         //InetAddress thisIp = InetAddress.getByName("A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com");
         String host = "A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com";

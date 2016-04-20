@@ -275,7 +275,7 @@ public class DevicesFragment extends Fragment {
                         .build();
 
                 URL url = new URL(builtUri.toString());
-
+                Log.d("Device Flow", paramString[0]);
                 Log.d("Device Flow", "Built URI: " + builtUri.toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
