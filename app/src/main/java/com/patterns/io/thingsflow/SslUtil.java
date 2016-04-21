@@ -9,7 +9,6 @@ import org.spongycastle.openssl.jcajce.JcaPEMKeyConverter;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +17,7 @@ import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.Security;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -26,21 +26,21 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-//import org.bouncycastle.jce.*;
 
 public class SslUtil
 {
 
-    static SSLSocketFactory getSocketFactory (final String caCrtFile, final String crtFile, final String keyFile,
-                                              final String password, final InputStream caFileStream,
-                                              final InputStream clientCertStream,final InputStream clientPrivateStream) throws Exception
+    static SSLSocketFactory getSocketFactory ( final String password, final String brokerString, final String brokerPort, final InputStream caFileStream,
+                                                final InputStream clientCertStream,final InputStream clientPrivateStream) throws Exception
     {
+
+
+        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //////////// INPUT STREAMS                            /////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////
         Security.addProvider(new BouncyCastleProvider());
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        File caFile                = new File(caCrtFile);
-        File clientCertFile        = new File(crtFile);
-        File clientPrivateFile     = new File(keyFile);
 
         int caSize              = caFileStream.available();
         int clientCertSize      = clientCertStream.available();
@@ -74,6 +74,8 @@ public class SslUtil
 
         ///////////////////////////////////////////////////////////////////////////////////////////
 
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+
         // Load CA certificate
         PEMParser reader = new PEMParser(new InputStreamReader(new ByteArrayInputStream(caCertBytes  )));
         X509Certificate caCert = new JcaX509CertificateConverter().setProvider( "BC" )
@@ -94,7 +96,7 @@ public class SslUtil
 
         // CA certificate is used to authenticate server
         KeyStore caKs = KeyStore.getInstance(KeyStore.getDefaultType());
-        caKs.load(caFileStream,password.toCharArray());
+        caKs.load(null,null);
         caKs.setCertificateEntry("ca-certificate", caCert);
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmf.init(caKs);
@@ -104,25 +106,17 @@ public class SslUtil
         ks.load(null, null);
         ks.setCertificateEntry("certificate", cert);
         ks.setKeyEntry("private-key", key.getPrivate(), password.toCharArray(), new Certificate[]{cert});
-
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         kmf.init(ks, password.toCharArray());
 
         // finally, create SSL socket factory
         SSLContext context = SSLContext.getInstance("TLSv1.2");
+        //context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+        context.init(null, tmf.getTrustManagers(), null);
 
-        context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-
-        //InetAddress thisIp = InetAddress.getByName("A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com");
-        SSLSocket sslSocket = (SSLSocket)context.getSocketFactory().createSocket("A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com", 8883);
-        sslSocket.setEnabledProtocols(new String[]{"TLSv1.2", "TLSv1.1", "TLSv1"});
-
-        //sslSocket.setEnabledCipherSuites(new String[]{"AES256-SHA"});
-
-        //sslSocket.setEnabledCipherSuites(new String[]{"ECDHE-RSA-AES128-GCM-SHA256"});
-        //AES128-SHA
-        //ECDHE-RSA-AES128-SHA
-        //((SSLServerSocket)serverSocket).setEnabledCipherSuites(context.getServerSocketFactory().getSupportedCipherSuites());
+        int port = Integer.valueOf(brokerPort);
+        SSLSocket sslSocket = (SSLSocket)context.getSocketFactory().createSocket(brokerString, port);
+        sslSocket.setEnabledProtocols(new String[] {"TLSv1.2"} );
         ///////////////////////////////////////////////////////////////////////////////////////////
         return context.getSocketFactory();
     }

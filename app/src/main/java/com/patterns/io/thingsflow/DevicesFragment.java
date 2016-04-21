@@ -120,16 +120,14 @@ public class DevicesFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l ){
 
                 String device = devicesAdapter.getItem(position);
+                Log.d("Position of List" , "Position is: " + position);
                 //Toast.makeText(getActivity(), "this is my Toast message!!! =)", Toast.LENGTH_SHORT).show();
 
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 detailIntent.putExtra("DEVICE", device);
                 startActivity(detailIntent);
-
-
             }
         });
-
 
         return rootView;
 
