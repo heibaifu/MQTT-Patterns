@@ -51,6 +51,7 @@ public class DetailActivityFragment extends Fragment {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.devicefragment, menu);
         //getMenuInflater().inflate(R.menu.devicefragment, menu);
+
     }
 
 
