@@ -1,3 +1,4 @@
+<!--tools:showIn="@layout/detail_layout"-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,8 +8,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.patterns.io.thingsflow.DetailActivityFragment"
-    tools:showIn="@layout/detail_layout"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
 
     <ScrollView
@@ -19,6 +21,40 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabConnect"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabPublish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabSubscribe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                </LinearLayout>
+
+            </TableRow>
+
 
             <TableRow
                 android:layout_width="match_parent"
@@ -74,12 +110,12 @@
                         android:layout_weight="3"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="27dp"
-                        android:inputType="number"
-                        android:text="8883" />
+                        android:inputType="number" />
 
                 </LinearLayout>
 
             </TableRow>
+
 
             <TableRow
                 android:layout_width="match_parent"

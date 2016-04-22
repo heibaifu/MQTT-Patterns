@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,12 +31,15 @@ import java.io.InputStream;
  */
 public class DetailActivityFragment extends Fragment {
 
+    final static String puerto = "";
+
     public EditText             textBroker;
     public EditText             textPort;
     public EditText             textPublish;
     public EditText             textPublishTopic;
 
     public FloatingActionButton fab;
+    public FloatingActionButton fabConnect;
 
     public DetailActivityFragment() {
     }
@@ -43,6 +48,9 @@ public class DetailActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
+
+
+
         setHasOptionsMenu(true);
     }
 
@@ -65,17 +73,31 @@ public class DetailActivityFragment extends Fragment {
         ///////////////  ALL THIS IS   I/O    MQTT STUFF //////////////////////////////////////////
         // Find the listView by its ID
         fab                 = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fabConnect          = (FloatingActionButton) rootView.findViewById(R.id.fabConnect);
+
         textBroker          = (EditText)             rootView.findViewById(R.id.editTextBroker);
         textPort            = (EditText)             rootView.findViewById(R.id.editTextPort);
         textPublish         = (EditText)             rootView.findViewById(R.id.editTextPublish);
         textPublishTopic    = (EditText)             rootView.findViewById(R.id.editTextPublishTopic);
 
-        fab.setOnClickListener(onClickListenerMQTT);
+        fab       .setOnClickListener(onClickListenerMQTT);
+        fabConnect.setOnClickListener(onClickListenerMQTT);
 
-        textBroker.setText("192.168.0.11");
+        //textBroker.setText("192.168.0.11");
         //textBroker.setText("A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com");
 
         return rootView;
+    }
+
+    @Override
+    public void onStart(){
+
+        super.onStart();
+        Bundle args = getArguments();
+        if (args != null) {
+            textBroker.setText(args.getString(puerto));
+        }
+
     }
 
 
@@ -97,9 +119,21 @@ public class DetailActivityFragment extends Fragment {
                     String argument[] = {stringBroker,stringPort, URIbroker,publishTopic,textToPublish};
                     mqttSender.execute(argument);
                     break;
+
+                case R.id.fabConnect:
+                    //Handle Button click
+                    ConnectFragment connectFragment = new ConnectFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, connectFragment);
+                    fragmentTransaction.commit();
+                    break;
             }
         }
     };
+
+
+
 
     //The AsyncTask is called with <Params, Progress, Result>
     public class SendMQTT extends AsyncTask<String, Void, String[]> {
@@ -120,9 +154,6 @@ public class DetailActivityFragment extends Fragment {
             */
 
             String connectionURI = paramString[2];
-            //String connectionURI = "ssl://192.168.0.11:8883";
-            //String connectionURI = "ssl://A33DKVX6YQAT9A.iot.us-west-2.amazonaws.com:8883";
-            //String connectionURI = "tcp://broker.mqttdashboard.com:1883";
 
             String topic                = paramString[3];
             String content              = paramString[4];
