@@ -65,7 +65,6 @@ public class DevicesFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.devicefragment, menu);
-        //getMenuInflater().inflate(R.menu.devicefragment, menu);
     }
 
     @Override
@@ -123,7 +122,7 @@ public class DevicesFragment extends Fragment {
                 Log.d("Position of List" , "Position is: " + position);
                 //Toast.makeText(getActivity(), "this is my Toast message!!! =)", Toast.LENGTH_SHORT).show();
 
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+                Intent detailIntent = new Intent(getActivity(), MQTTActivity.class);
                 detailIntent.putExtra("DEVICE", device);
                 startActivity(detailIntent);
             }
