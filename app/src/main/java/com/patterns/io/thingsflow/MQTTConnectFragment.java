@@ -182,9 +182,5 @@ public class MQTTConnectFragment extends Fragment {
     };
 
 
-    public void simon(){
-
-    }
-
 
 }

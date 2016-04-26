@@ -1,6 +1,7 @@
 <!--tools:showIn="@layout/detail_layout"-->
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
@@ -28,7 +29,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/fabConnect"
@@ -36,7 +38,8 @@
                         android:layout_height="wrap_content"
                         android.support.design:fabSize="mini"
                         android:layout_marginLeft="3dp"
-                        android:src="@drawable/c_white" />
+                        app:backgroundTint="@color/red"
+                        android:src="@drawable/c" />
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/fabPublish"
@@ -44,8 +47,8 @@
                         android:layout_height="wrap_content"
                         android.support.design:fabSize="mini"
                         android:layout_marginLeft="3dp"
-                        android:src="@drawable/p_white"
-                        android:scaleType="fitXY" />
+                        app:backgroundTint="@color/red"
+                        android:src="@drawable/p"/>
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/fabSubscribe"
@@ -53,7 +56,8 @@
                         android:layout_height="wrap_content"
                         android.support.design:fabSize="mini"
                         android:layout_marginLeft="3dp"
-                        android:src="@drawable/s_white" />
+                        app:backgroundTint="@color/red"
+                        android:src="@drawable/s" />
                 </LinearLayout>
 
             </TableRow>
@@ -66,6 +70,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:weightSum="5">
 
                     <TextView
@@ -97,6 +102,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:weightSum="5">
 
                     <TextView
@@ -129,6 +135,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:weightSum="5">
 
                     <TextView
@@ -182,7 +189,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="27dp"
                         android:textSize="7pt"
-                        android:text="SSL/TLS"
+                        android:text="SSL/TLS(not implemente)"
                         android:textColor="#888888"
                         android:gravity="center_vertical"/>
 
@@ -201,7 +208,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_gravity="end|bottom"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/done_white"
 
         />
 

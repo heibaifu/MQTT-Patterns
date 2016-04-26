@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -163,13 +162,7 @@ public class MQTTSubscribeFragment extends Fragment {
         }
     };
 
-    public void updateList(String topic, String message){
-
-        for(int i = 4; i >= 1; i--){
-            Log.d("message Adapter", "in here" + i);
-            messages[i] =  messages[i-1];
-        }
-        messages[0] = topic + "/" + message;
+    public void updateList(String messages[]){
 
         messagesAdapter.clear();
         messagesAdapter.addAll(messages);

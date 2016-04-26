@@ -50,6 +50,7 @@ import java.io.InputStream;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.detail_layout);
 
         context = this;
@@ -58,6 +59,10 @@ import java.io.InputStream;
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        //getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
 
         fragmentManager     = getSupportFragmentManager();
 
@@ -191,13 +196,20 @@ import java.io.InputStream;
         MQTTmessage     = message.toString();
         topicToSubscribe = topic;
 
+        for(int i = 4; i >= 1; i--){
+            messages[i] =  messages[i-1];
+        }
+        messages[0] = topic + "/" + message;
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 try {
-                    MQTTSubscribeFragment fragment_obj = (MQTTSubscribeFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                    fragment_obj.updateList(topicToSubscribe, MQTTmessage.toString());
+                    if(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MQTTSubscribeFragment ) {
+                        MQTTSubscribeFragment fragment_obj = (MQTTSubscribeFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                        fragment_obj.updateList(messages);
+                    }
                 } catch (Exception e) {
                     Log.d("Error", "" + e);
                 }
