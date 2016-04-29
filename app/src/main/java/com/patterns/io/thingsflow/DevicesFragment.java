@@ -1,15 +1,19 @@
 package com.patterns.io.thingsflow;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -27,12 +31,14 @@ public class DevicesFragment extends Fragment {
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
 
+
+
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.devicefragment, menu);
+        //inflater.inflate(R.menu.devicefragment, menu);
     }
 
     @Override
@@ -43,9 +49,22 @@ public class DevicesFragment extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
-            //FetchDevicesTask devicesTask = new FetchDevicesTask();
-            //devicesTask.execute("22194,mx");
+        if (id == R.id.action_about) {
+            Log.d("get item","" +id);
+
+            final Dialog dialog = new Dialog(getActivity());
+
+            dialog.setContentView(R.layout.about_layout);
+            dialog.setTitle("About Things Flow");
+
+            Button btnCancel        = (Button) dialog.findViewById(R.id.dismiss);
+            dialog.show();
+
+            btnCancel.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
             return true;
         }
 

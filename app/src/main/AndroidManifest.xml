@@ -3,8 +3,7 @@
     package="com.patterns.io.thingsflow">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
     <uses-library
         android:name="com.google.android.gms.security.ProviderInstaller" />
 
@@ -34,5 +33,11 @@
                 android:value="com.patterns.io.thingsflow.MainActivity" />
         </activity>
     </application>
+
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
 
 </manifest>
