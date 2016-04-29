@@ -1,6 +1,9 @@
 package com.patterns.io.thingsflow;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +28,9 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.io.InputStream;
 
- public class MQTTActivity extends AppCompatActivity implements ConnectDataPassListener, PublishDataPassListener, MqttCallback, SubscribeDataPassListener  {
+public class MQTTActivity extends AppCompatActivity implements ConnectDataPassListener, PublishDataPassListener, MqttCallback, SubscribeDataPassListener  {
+
+     private static final int PICKFILE_RESULT_CODE = 1;
 
     public String                   topicToPublish;
     public String                   topicToSubscribe;
@@ -47,6 +52,8 @@ import java.io.InputStream;
 
     public Context                  context;
 
+    public Uri                      pathUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +67,7 @@ import java.io.InputStream;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        //getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-
-        fragmentManager     = getSupportFragmentManager();
+       fragmentManager     = getSupportFragmentManager();
 
         // Check whether the activity is using the layout version with
         // the fragment_container FrameLayout. If so, we must add the first fragment
@@ -107,8 +110,9 @@ import java.io.InputStream;
 
         Bundle args = new Bundle();
 
-        args.putString("topic",        topicToPublish);
-        args.putString("text",content);
+        args.putString("topic",topicToPublish);
+        args.putString("text", content);
+        args.putInt   ("qos",qos);
 
         publishFragment.setArguments(args);
 
@@ -159,21 +163,22 @@ import java.io.InputStream;
     // Interface to call the construction of MQTT client from fragments.
     public void createMQTTClient(String connectParams[]){
 
-        SendMQTT mqttClient = new SendMQTT();
+        MQTTClientClass mqttClient = new MQTTClientClass();
         mqttClient.execute(connectParams);
     }
 
     // Interface to publish an MQTT message to topicToPublish.
     public void publishMQTTmessage(String publishParams[]) {
 
-        SendMQTT mqttClient = new SendMQTT();
+        MQTTClientClass mqttClient = new MQTTClientClass();
         mqttClient.execute(publishParams);
     }
 
     // Interface to subscribe the MQTT client to a given topicToPublish
     public void subscribeMQTTtopic(String subscribeParams[]){
-        client.setCallback(this);
+
         try {
+            client.setCallback(this);
             client.subscribe(subscribeParams[1]);
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,6 +187,33 @@ import java.io.InputStream;
         }
         Toast.makeText(getApplicationContext(), "Subscribed to Topic " + subscribeParams[1], Toast.LENGTH_SHORT).show();
     }
+
+
+    public void findFile(){
+        Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
+        fileintent.setType("*/*");
+
+        try {
+            startActivityForResult(fileintent, PICKFILE_RESULT_CODE);
+        } catch (ActivityNotFoundException e) {
+            Log.e("tag", "No activity can handle picking a file. Showing alternatives.");
+        }
+    }
+
+
+     @Override
+     public  void onActivityResult(int requestCode, int resultCode, Intent data) {
+         // TODO Fix no activity available
+         if (data == null)
+             return;
+         switch (requestCode) {
+             case PICKFILE_RESULT_CODE:
+                 if (resultCode == RESULT_OK) {
+                     pathUri = data.getData();
+                 }
+         }
+     }
+
 
     @Override
     public void connectionLost(Throwable cause) {
@@ -223,7 +255,7 @@ import java.io.InputStream;
     }
 
     //The AsyncTask is called with <Params, Progress, Result>
-    public class SendMQTT extends AsyncTask<String, Void, String[]> {
+    public class MQTTClientClass extends AsyncTask<String, Void, String[]> {
 
         public String              brokerURI;
 
@@ -242,9 +274,7 @@ import java.io.InputStream;
                     port                          = paramString[2];
                     brokerURI                     = paramString[3];
                     clientId                      = paramString[4];
-                    Log.d("brokerString",""+ broker);
-                    Log.d("portString",""+ port);
-                    Log.d("clientString", ""+clientId);
+
                     MemoryPersistence persistence = new MemoryPersistence();
 
                     try {
@@ -252,22 +282,18 @@ import java.io.InputStream;
                         options = new MqttConnectOptions();
                         options.setCleanSession(true);
 
-                        ///////////////////////////////////////////////////////////////////////////////////
                         options.setConnectionTimeout(60);
                         options.setKeepAliveInterval(60);
 
-                        InputStream caCert      = getResources().openRawResource(R.raw.root);
-                        InputStream clientCert  = getResources().openRawResource(R.raw.certificate);
-                        InputStream privateKey  = getResources().openRawResource(R.raw.privatekey);
-
-                        Log.d("Things Flow - I/O", "Checkpoint 1");
                         if(paramString[5] == "tcp"){
 
                         }else {
-                            options.setSocketFactory(SslUtil.getSocketFactory("1234", paramString[0], paramString[1], caCert, clientCert, privateKey));
+                            InputStream caCert = getContentResolver().openInputStream(pathUri);
+                            InputStream clientCert  = getResources().openRawResource(R.raw.certificate);
+                            InputStream privateKey  = getResources().openRawResource(R.raw.privatekey);
+                            options.setSocketFactory(SslUtil.getSocketFactory("1234", paramString[1], paramString[2], caCert, clientCert, privateKey));
                         }
-                        //////////////////////////////////////////////////////////////////////////////////
-                        Log.d("Things Flow - I/O", "Checkpoint 2");
+
                         System.out.println("Connecting to broker: " + broker);
                         client.connect(options);
                         System.out.println("Connected");
@@ -289,11 +315,14 @@ import java.io.InputStream;
 
                 case "publish":
 
-                    topicToPublish = paramString[2];
-                    content = paramString[1];
+                    content         = paramString[1];
+                    topicToPublish  = paramString[2];
+                    qos             = Integer.parseInt(paramString[3]);
+
                     System.out.println("Publishing message: " + content);
                     MqttMessage message = new MqttMessage(content.getBytes());
                     message.setQos(qos);
+
                     try {
                         client.publish(topicToPublish, message);
 
@@ -326,8 +355,6 @@ import java.io.InputStream;
                     case "connect":
                         Log.d("Connect", "just connected");
                         Toast.makeText(getApplicationContext(), "Connected to " + broker + " on Port " + port, Toast.LENGTH_SHORT).show();
-
-
                         break;
 
                     case "publish":

@@ -154,7 +154,6 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:gravity="center_vertical"
-                        android:inputType="number"
                         android:text="Sample Client"
                         android:textSize="15dp" />
 
