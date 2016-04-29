@@ -26,7 +26,17 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+/*
+This class is extracted from a question in Stack overflow, modified to fit the needs of this implementation
+http://stackoverflow.com/questions/12997559/ssl-connection-from-java-client-eclipse-paho-to-mosquitto-broker-unknown-ca
+https://gist.github.com/sharonbn/4104301
+https://gist.github.com/rohanag12/07ab7eb22556244e9698
 
+The last link is only useful, but this implementation is not taken from there.
+
+Also notice that BouncyCastle Libraries are working properly in standard Java, but incomplete for Android,
+instead we use SpongyCastle, which is meant to be the full version for this platform.
+*/
 public class SslUtil
 {
 
@@ -37,9 +47,6 @@ public class SslUtil
 
         Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
 
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        //////////// INPUT STREAMS                            /////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////////
         Security.addProvider(new BouncyCastleProvider());
 
         int caSize              = caFileStream.available();
@@ -71,8 +78,6 @@ public class SslUtil
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
@@ -111,13 +116,18 @@ public class SslUtil
 
         // finally, create SSL socket factory
         SSLContext context = SSLContext.getInstance("TLSv1.2");
+        //TODO: Current implementation does not use KeyManagerFactories, and only implements a
+        //TODO: CA File, still to implement the rest of the files, they seem to work, but apparently,
+        //TODO: there is an problem with Android versions not enabling TLSv1.2 properly
+        //TODO: http://stackoverflow.com/questions/24357863/making-sslengine-use-tlsv1-2-on-android-4-4-2
+        // one of many occurrences on the web.
         //context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         context.init(null, tmf.getTrustManagers(), null);
 
         int port = Integer.valueOf(brokerPort);
         SSLSocket sslSocket = (SSLSocket)context.getSocketFactory().createSocket(brokerString, port);
         sslSocket.setEnabledProtocols(new String[] {"TLSv1.2"} );
-        ///////////////////////////////////////////////////////////////////////////////////////////
+
         return context.getSocketFactory();
     }
 }

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,8 +21,9 @@ import android.widget.EditText;
  */
 public class MQTTPublishFragment extends Fragment {
 
-    public String                       topicString;
-    public String                       textToPublishString;
+    public String                       topicToPublish;
+    public String                       textToPublish;
+    public String                       qos;
 
     public EditText                     textPublish;
     public EditText                     textPublishTopic;
@@ -36,8 +36,10 @@ public class MQTTPublishFragment extends Fragment {
     public PublishDataPassListener      mCallback;
 
     public MQTTPublishFragment() {
+        // Required empty public constructor
     }
 
+    // Interface of the functions from the parent Activity that this Fragment will call
     public interface PublishDataPassListener{
         void launchSubscribeFragment(String data);
         void launchConnectFragment(String data);
@@ -50,6 +52,8 @@ public class MQTTPublishFragment extends Fragment {
 
         Activity activity;
 
+        // An Activity is needed to create the interface callback, so it is cast from the context
+        // This is due to the onAttach method with Activity instead of context has ben deprecated
         if (context instanceof Activity){
             activity=(Activity) context;
 
@@ -88,14 +92,14 @@ public class MQTTPublishFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_about) {
-            Log.d("get item", "" + id);
 
+            // Create a dialog that pups up with information about the application
             final Dialog dialog = new Dialog(getActivity());
 
             dialog.setContentView(R.layout.about_layout);
             dialog.setTitle("About Things Flow");
 
-            Button btnCancel        = (Button) dialog.findViewById(R.id.dismiss);
+            Button btnCancel = (Button) dialog.findViewById(R.id.dismiss);
             dialog.show();
 
             btnCancel.setOnClickListener(new OnClickListener() {
@@ -113,10 +117,10 @@ public class MQTTPublishFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_publish, container, false);
 
-        // Find the listView by its ID
+        // Initialise all necessary Views, their values and onClickListener's
         fabPublishTotopics  = (FloatingActionButton) rootView.findViewById(R.id.fabPublishToTopic);
         fabConnect          = (FloatingActionButton) rootView.findViewById(R.id.fabConnect);
         fabSubscribe        = (FloatingActionButton) rootView.findViewById(R.id.fabSubscribe);
@@ -132,6 +136,11 @@ public class MQTTPublishFragment extends Fragment {
         return rootView;
     }
 
+    /*
+    This is called when landing here from another fragment (through the parent Activity)
+    Therefore, the values are extracted of the arguments that have been passed onto here
+    to have consistency in the UI values and update them as needed
+    */
     @Override
     public void onStart(){
 
@@ -145,28 +154,32 @@ public class MQTTPublishFragment extends Fragment {
         }
     }
 
+    // onClickListener for all Views. The action if filtered by the name of the View
     private OnClickListener onClickListenerMQTT = new OnClickListener() {
         @Override
         public void onClick(final View v) {
-            switch(v.getId()){
-                case R.id.fabPublishToTopic:
-                    //Handle Button click
-                    String textToPublish= textPublish       .getText().toString();
-                    String publishTopic = textPublishTopic  .getText().toString();
-                    String qos          = textPublishQoS    .getText().toString();
 
-                    String connectParams[] = {"publish", textToPublish,publishTopic,qos};
+            switch(v.getId()){
+
+                case R.id.fabPublishToTopic:
+                    //Handle the Button to publish the message
+                    textToPublish   = textPublish       .getText().toString();
+                    topicToPublish  = textPublishTopic  .getText().toString();
+                    qos             = textPublishQoS    .getText().toString();
+
+                    // Bundle the parameters, and call the parent Activity method to start the connection
+                    String connectParams[] = {"publish", textToPublish,topicToPublish,qos};
                     mCallback.publishMQTTmessage(connectParams);
 
                     break;
 
                 case R.id.fabConnect:
-                    //Handle Button click
+                    // Change to the Connect fragment, through the parent Activity interface
                     mCallback.launchConnectFragment("");
                     break;
 
                 case R.id.fabSubscribe:
-                    //Handle Button click
+                    // Change to the Subscribe fragment, through the parent Activity interface
                     mCallback.launchSubscribeFragment("");
                     break;
             }

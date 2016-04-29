@@ -10,7 +10,7 @@
     <string name="mqtt_connect">Connect to Broker</string>
     <string name="mqtt_subscribe">Subscribe to Topic</string>
     <string name="description">ThingsFlow. This application provides a simple implementation of an MQTT client capable of one connection at the time, publishing and multiple subscriptions to any given topic. \n \n
-        It does not support SSL/TLS as of this verison, however, work is in progress.</string>
+        It supports only a single CA file for SSL/TLS as of this version, however, work is in progress to add a client private key and certificate..</string>
 
     <string name="aboutText">Thigns Flow v.3.0  \n
                             by I / O Patterns \n
