@@ -7,6 +7,6 @@ It supports only a single CA file for SSL/TLS as of this version, however, work 
 
 The code is open source and is based on the Paho library by Eclipse.
 
-This is a Beta version, please use this application with this assumption. Any bug, comments and suggestions reported are greatly appreciated to improve this application for further and better use. 
+This is a Beta version. Any bug, comments and suggestions reported are greatly appreciated to improve this application for further and better use. 
 
 -The team at IO-Patterns-
