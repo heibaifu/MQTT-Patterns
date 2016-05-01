@@ -5,9 +5,7 @@ This MQTT Client provides a simple implementation capable of one connection at t
 
 It supports only a single CA file for SSL/TLS as of this version, however, work is in progress to add a client private key and certificate.
 
-The code is open source and is based on the Paho library by Eclipse. It is available in the following repository:
-
-https://github.com/iorobertob/ThingsFlow
+The code is open source and is based on the Paho library by Eclipse.
 
 This is a Beta version, please use this application with this assumption. Any bug, comments and suggestions reported are greatly appreciated to improve this application for further and better use. 
 
