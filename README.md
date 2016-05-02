@@ -1,4 +1,4 @@
-# ThingsFlow
+# MQTT Patterns
 Android App MQTT client for IoT 
 
 This MQTT Client provides a simple implementation capable of one connection at the time, publishing and multiple subscriptions to any given topic.
