@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.patterns.io.thingsflow.DevicesFragment"
+    tools:context="com.patterns.io.mqttpatterns.DevicesFragment"
     tools:showIn="@layout/content_main">
 
 
@@ -25,8 +25,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView"
-                android:gravity="center"
-                android:src="@drawable/chip50"/>
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/chip25"/>
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/description"
                     android:layout_span="1"
                     android:id="@+id/textView" />

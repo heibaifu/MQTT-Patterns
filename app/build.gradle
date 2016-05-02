@@ -11,12 +11,21 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.patterns.io.thingsflow"
-        minSdkVersion 14
+        applicationId "com.patterns.io.mqttpatterns"
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
 
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("myreleasekey.keystore")
+            storePassword "password"
+            keyAlias "MyReleaseKey"
+            keyPassword "password"
+        }
     }
 
 
@@ -24,6 +33,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

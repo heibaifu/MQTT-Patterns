@@ -1,4 +1,4 @@
-package com.patterns.io.thingsflow;
+package com.patterns.io.mqttpatterns;
 
 import org.junit.Test;
 
