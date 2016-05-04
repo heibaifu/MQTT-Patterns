@@ -17,9 +17,9 @@ import android.widget.Button;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DevicesFragment extends Fragment {
+public class MainActivityFragment extends Fragment {
 
-    public DevicesFragment() {
+    public MainActivityFragment() {
 
     }
 
